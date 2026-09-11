@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>親子の水泳大会 1日ナビ</title><meta name="description" content="わが子の出番、集合、食事、休憩をひとつの予定表に。名前の公開は不要です。">
+<style>
+:root{color-scheme:dark;--bg:#091321;--panel:#132238;--line:#32445d;--text:#f1f6ff;--muted:#b9c7dc;--cyan:#70e1f1;--warn:#ffd49c}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}main,header,nav,footer{max-width:1000px;margin:auto;padding:16px}header{padding-bottom:0}h1{font-size:clamp(24px,4vw,34px);margin:8px 0}h2{font-size:21px;margin:0 0 12px}h3{font-size:17px;margin:0 0 8px}p{margin:8px 0}a{color:var(--cyan)}nav{position:sticky;top:0;z-index:5;display:flex;gap:8px;background:var(--bg)}nav a{flex:1;text-align:center;text-decoration:none;padding:10px 4px;border:1px solid var(--line);border-radius:12px;font-size:14px}section,.card,details{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px;min-width:0}details details{margin-top:12px}summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}label{display:flex;flex-direction:column;gap:6px;font-size:14px;min-width:0}input,select,textarea,button{font:inherit;max-width:100%;min-height:46px;border-radius:10px;border:1px solid #52647d;background:#0b182b;color:var(--text);padding:10px;width:100%}input,select,textarea{font-size:16px}textarea{min-height:90px;resize:vertical}button{cursor:pointer;width:auto;background:#213a56;font-weight:600}button.primary{background:var(--cyan);color:#072433;border:0}button.danger{color:#ffb5b5}button:disabled{opacity:.5;cursor:default}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.full{grid-column:1/-1}.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.muted,small{color:var(--muted);font-size:14px}.race{border-left:3px solid var(--cyan);margin-top:14px}.badge{font-size:13px;color:var(--cyan)}.event{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;padding:16px 0;border-top:1px solid var(--line)}.event time{font-variant-numeric:tabular-nums;font-weight:700}.event label{flex-direction:row;font-size:16px;align-items:flex-start}.event input[type=checkbox],.kit input{width:24px;min-width:24px;height:24px;min-height:24px;margin:3px 6px 0 0}.checked{opacity:.65}.checked strong{text-decoration:line-through}.warning{border-left:3px solid var(--warn);padding:10px 14px;color:var(--warn);margin:8px 0}.next{border-color:var(--cyan);background:linear-gradient(120deg,#173f53,#132238)}.next strong{font-size:23px}.daytitle{margin:20px 0 8px}.kit{display:flex;flex-direction:row;align-items:center;padding:8px}.empty{padding:20px 0;color:var(--muted)}#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);max-width:90vw;background:#e0f9ff;color:#092239;border-radius:12px;padding:12px 20px;z-index:10}#toast:empty{display:none}:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}html{scroll-padding-top:90px;scroll-behavior:smooth}footer{font-size:13px;color:var(--muted)}.rowhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.event p{overflow-wrap:anywhere}#saveStatus{min-height:24px}ul{padding-left:22px}li{margin:8px 0}@media(max-width:520px){main,header,nav,footer{padding:12px}section,.card,details{padding:14px}.grid{grid-template-columns:1fr}.full{grid-column:auto}nav{gap:5px}nav a{font-size:13px}.event{grid-template-columns:58px minmax(0,1fr);gap:8px}.actions button{flex-grow:1}.next strong{font-size:20px}}@media print{body{background:#fff;color:#111;font-size:12px}header,nav,#settings,#guide,#kit,#next,#saveStatus,.actions,footer,#toast{display:none!important}main{max-width:none}section,.card,details{background:white;color:#111;border-color:#bbb;box-shadow:none}.event{break-inside:avoid;border-color:#ccc}.muted,.badge,small{color:#333}.warning{color:#222}input[type=checkbox]{appearance:auto}#timeline:empty:after{content:"予定がありません"}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head><body>
+<header><span class="badge">SWIM · FAMILY DAY PLAN</span><h1>親子の水泳大会 1日ナビ</h1><p class="muted">出場種目とコーチの集合指示を登録。親子の1日を、この端末に保存します。</p></header>
+<nav aria-label="ページ内移動"><a href="#next">次の予定</a><a href="#timeline">1日の流れ</a><a href="#settings">設定</a><a href="#guide">食事と準備</a></nav>
+<main><section id="next" class="next" aria-live="polite"></section><p id="saveStatus" class="muted" role="status"></p>
+<details id="settings" open><summary>予定の設定</summary>
+<p class="muted">名前は不要。「上の子」「下の子」でも使えます。空欄は未定として扱います。</p>
+<div id="days"></div><div class="actions"><button id="addDay">＋ 日を追加</button><button id="reset" class="danger">この端末の予定をリセット</button></div></details>
+<section id="timeline"><div class="rowhead"><h2>1日の流れ</h2><div class="actions"><button id="copy">予定をコピー</button><button id="print">印刷 / PDF</button></div></div><p class="muted">公式予定・自分の入力を区別して表示します。終わった予定にチェック。当日の案内を優先してください。</p><div id="warnings"></div><div id="events"></div></section>
+<details id="kit"><summary>持ち物チェック</summary><div id="kitItems"></div><p class="muted">チーム指定の持ち物も確認してください。</p></details>
+<details id="guide"><summary>食事・水分・アップの考え方</summary>
+<h3>食事と補食</h3><p>毎レース前に食べる必要はありません。食べ慣れた物を選び、空腹感・直前の食事・運動の量に応じて調整しましょう。運動直前の大量の食事は避け、食物アレルギーに配慮してください。</p><p>自分で決めた食事・補食を予定に登録できます。回数や量の自動指定はしません。待ち時間の長さだけで補食の必要量は決まりません。</p>
+<h3>水分と体調</h3><p>運動の前・合間・後に飲めるよう、水を用意しましょう。長時間の強い運動や多量の発汗がある場合は、補給方法を個別に相談してください。子どもの補給にエナジードリンクを使わないでください。</p><p>めまい、頭痛、吐き気、普段と違う様子があれば運動を中断し、コーチ・救護へ。倒れた、意識がおかしいなどの場合は、すぐ救急対応を求めてください。</p>
+<h3>アップとレースの合間</h3><p>アップはコーチの指示と会場の利用ルールに合わせます。泳ぐ量、チューブの負荷、飛び込み練習はアプリでは指定しません。水中での準備は監督者の指示に従い、痛みを我慢して続けないでください。</p><p>出番が近いときは、準備を何度も増やす前に次の集合を確認。レース後の着替えや休憩も、コーチの方針と体調に合わせて登録できます。</p>
+<h3>時刻の見方</h3><p>「種目開始」はその種目の最初の組の開始予定です。自分の組の出番や招集時刻ではありません。組が分かったら時刻の種類・組・レーンを入力し直せます。予定変更は該当する時刻を編集してください。完了済みの予定は、編集した項目以外は保たれます。</p><p>「次の予定」は日本時間で、その日以降の未完了の予定を表示します。通知・アラームは鳴りません。予定時刻が過ぎても、完了するまで消えません。</p>
+<h3>保存と共有</h3><p>入力内容はこのブラウザだけに保存します。サーバーへの送信・閲覧カウンター・名前一覧はありません。保存制限やプライベートブラウズでは消える場合があります。コピー・印刷を予備に使ってください。端末間の同期はありません。</p>
+<p class="muted">個人が公開資料を参考に作ったヒントです。お子さんの体調やコーチの指示に合わせて調整してください。</p>
+<button type="button" id="sourcesToggle" aria-expanded="false" aria-controls="sourcesPanel">参考資料・詳しい説明を見る</button>
+<div id="sourcesPanel" hidden>
+<p>ゼリーにも糖質補給用・低カロリー・カフェイン入りなどの違いがあります。商品例は購入の推奨ではなく、表示を見分けるための参考です。粉末アミノ酸は糖質補給の代わりにはせず、自動の補食候補には含めません。</p>
+<ul><li><a href="https://www.morinaga.co.jp/in/jelly/jrenergy/" target="_blank" rel="noopener">森永製菓：inゼリー ジュニアエネルギー（子ども向けの商品例）</a></li><li><a href="https://www.morinaga.co.jp/in/jelly/products/energy_deep/" target="_blank" rel="noopener">森永製菓：エネルギーDEEP（カフェイン入り・子どもは飲用を控える表示）</a></li><li><a href="https://www.albertahealthservices.ca/assets/info/nutrition/if-nfs-sports-nutrition-for-youth.pdf" target="_blank" rel="noopener">Alberta Health Services：若年アスリートの栄養・アミノ酸サプリメント</a></li></ul>
+<p>自動提案の時刻は公式予定ではなく、このアプリの計画上の仮置きです。朝食は最初の準備の約2時間前、補食は出番の約1時間前、昼食は出番の前後に余裕がある時間を候補にします。これらの分数自体が専門機関の推奨値という意味ではありません。競技終了・移動には仮に20分を確保していますが、自分の組の時刻が未確定なら前後します。資料の一般原則（運動直前の大量の食事を避ける、活動に合わせて補給する）を参考に、各家庭が調整できるようにしています。</p>
+<h3 style="margin-top:16px">参照資料と内容の裏付け</h3><p class="muted">専門機関の一般向け資料との照合：2026年9月10日。専門家による本アプリの監修は受けていません。持病、食物アレルギー、個別の食事・運動計画は担当の専門職に相談してください。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.healthychildren.org/English/healthy-living/nutrition/Pages/Sports-Nutrition-for-Busy-Families-and-Busy-Lifestyles.aspx">米国小児科学会：子どものスポーツ栄養</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.healthychildren.org/English/healthy-living/nutrition/Pages/Choose-Water-for-Healthy-Hydration.aspx">米国小児科学会：水分補給</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.healthychildren.org/English/health-issues/injuries-emergencies/sports-injuries/Pages/Exercise-Related-Heat-Illness.aspx">米国小児科学会：暑い環境での運動</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.seattlechildrens.org/health-safety/injury-prevention/sports-injuries-children-teens/">Seattle Children's：準備運動とけが予防</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.usaswimming.org/docs/default-source/risk-management/safety-and-operational-risk/operational-risk-safety-manual.pdf">USA Swimming：アップ時の安全管理</a></li>
+</ul></div></details></main><footer>非公式の保護者用プランナー · © 2026 gyojin600m1</footer><div id="toast" role="status"></div>
+<script>
+"use strict";
+const PROGRAM=[{"no":1,"gender":"女子","distance":"200m","stroke":"個人ﾒﾄﾞﾚｰ","grade":"4年生以下","heats":1,"time":"09:30"},{"no":2,"gender":"女子","distance":"200m","stroke":"個人ﾒﾄﾞﾚｰ","grade":"5・6年生","heats":2,"time":"09:36"},{"no":3,"gender":"男子","distance":"200m","stroke":"個人ﾒﾄﾞﾚｰ","grade":"4年生以下","heats":1,"time":"09:44"},{"no":4,"gender":"男子","distance":"200m","stroke":"個人ﾒﾄﾞﾚｰ","grade":"5・6年生","heats":2,"time":"09:49"},{"no":5,"gender":"女子","distance":"100m","stroke":"背泳ぎ","grade":"4年生以下","heats":1,"time":"09:58"},{"no":6,"gender":"女子","distance":"100m","stroke":"背泳ぎ","grade":"5・6年生","heats":1,"time":"10:02"},{"no":7,"gender":"男子","distance":"100m","stroke":"背泳ぎ","grade":"4年生以下","heats":1,"time":"10:05"},{"no":8,"gender":"男子","distance":"100m","stroke":"背泳ぎ","grade":"5・6年生","heats":1,"time":"10:08"},{"no":9,"gender":"女子","distance":"100m","stroke":"平泳ぎ","grade":"4年生以下","heats":1,"time":"10:12"},{"no":10,"gender":"女子","distance":"100m","stroke":"平泳ぎ","grade":"5・6年生","heats":1,"time":"10:16"},{"no":11,"gender":"男子","distance":"100m","stroke":"平泳ぎ","grade":"4年生以下","heats":1,"time":"10:19"},{"no":12,"gender":"男子","distance":"100m","stroke":"平泳ぎ","grade":"5・6年生","heats":2,"time":"10:23"},{"no":13,"gender":"女子","distance":"100m","stroke":"バタフライ","grade":"4年生以下","heats":1,"time":"10:29"},{"no":14,"gender":"女子","distance":"100m","stroke":"バタフライ","grade":"5・6年生","heats":1,"time":"10:32"},{"no":15,"gender":"男子","distance":"100m","stroke":"バタフライ","grade":"4年生以下","heats":1,"time":"10:35"},{"no":16,"gender":"男子","distance":"100m","stroke":"バタフライ","grade":"5・6年生","heats":1,"time":"10:38"},{"no":17,"gender":"女子","distance":"100m","stroke":"自由形","grade":"4年生以下","heats":2,"time":"10:41"},{"no":18,"gender":"女子","distance":"100m","stroke":"自由形","grade":"5・6年生","heats":2,"time":"10:46"},{"no":19,"gender":"男子","distance":"100m","stroke":"自由形","grade":"4年生以下","heats":2,"time":"10:51"},{"no":20,"gender":"男子","distance":"100m","stroke":"自由形","grade":"5・6年生","heats":4,"time":"10:56"},{"no":21,"gender":"女子","distance":"4×50m","stroke":"リレー","grade":"共通","heats":2,"time":"11:15"},{"no":22,"gender":"男子","distance":"4×50m","stroke":"リレー","grade":"共通","heats":2,"time":"11:26"},{"no":23,"gender":"女子","distance":"50m","stroke":"背泳ぎ","grade":"4年生以下","heats":2,"time":"12:00"},{"no":24,"gender":"女子","distance":"50m","stroke":"背泳ぎ","grade":"5・6年生","heats":3,"time":"12:04"},{"no":25,"gender":"男子","distance":"50m","stroke":"背泳ぎ","grade":"4年生以下","heats":2,"time":"12:10"},{"no":26,"gender":"男子","distance":"50m","stroke":"背泳ぎ","grade":"5・6年生","heats":2,"time":"12:14"},{"no":27,"gender":"女子","distance":"50m","stroke":"平泳ぎ","grade":"4年生以下","heats":2,"time":"12:18"},{"no":28,"gender":"女子","distance":"50m","stroke":"平泳ぎ","grade":"5・6年生","heats":3,"time":"12:22"},{"no":29,"gender":"男子","distance":"50m","stroke":"平泳ぎ","grade":"4年生以下","heats":3,"time":"12:27"},{"no":30,"gender":"男子","distance":"50m","stroke":"平泳ぎ","grade":"5・6年生","heats":3,"time":"12:33"},{"no":31,"gender":"女子","distance":"50m","stroke":"バタフライ","grade":"4年生以下","heats":2,"time":"12:38"},{"no":32,"gender":"女子","distance":"50m","stroke":"バタフライ","grade":"5・6年生","heats":2,"time":"12:42"},{"no":33,"gender":"男子","distance":"50m","stroke":"バタフライ","grade":"4年生以下","heats":1,"time":"12:45"},{"no":34,"gender":"男子","distance":"50m","stroke":"バタフライ","grade":"5・6年生","heats":2,"time":"12:47"},{"no":35,"gender":"女子","distance":"50m","stroke":"自由形","grade":"4年生以下","heats":3,"time":"12:51"},{"no":36,"gender":"女子","distance":"50m","stroke":"自由形","grade":"5・6年生","heats":6,"time":"12:56"},{"no":37,"gender":"男子","distance":"50m","stroke":"自由形","grade":"4年生以下","heats":4,"time":"13:04"},{"no":38,"gender":"男子","distance":"50m","stroke":"自由形","grade":"5・6年生","heats":7,"time":"13:10"},{"no":39,"gender":"女子","distance":"4×50m","stroke":"ﾒﾄﾞﾚｰﾘﾚｰ","grade":"共通","heats":2,"time":"13:29"},{"no":40,"gender":"男子","distance":"4×50m","stroke":"ﾒﾄﾞﾚｰﾘﾚｰ","grade":"共通","heats":1,"time":"13:40"}];
+const KEY="swimRaceDayPlan.v4";
+const $=id=>document.getElementById(id);
+$("sourcesToggle").onclick=()=>{const open=$("sourcesPanel").hidden;$("sourcesPanel").hidden=!open;$("sourcesToggle").setAttribute("aria-expanded",String(open));$("sourcesToggle").textContent=open?"参考資料・詳しい説明を閉じる":"参考資料・詳しい説明を見る";};
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+Math.random().toString(36).slice(2);
+const MEET_DEFAULTS={reception:"07:20",opening:"07:30",warmStart:"07:40",warmEnd:"09:00",ceremony:"09:10",competition:"09:30"};
+function fillMeet(d){if(d.date==="2026-09-13")for(const [k,v] of Object.entries(MEET_DEFAULTS))if(!d[k])d[k]=v;d.meetVersion="secondary1";return d;}
+function newDay(){return fillMeet({id:uid(),date:"2026-09-13",label:"大会当日",wake:"",arrival:"",breakfast:"",reception:"",opening:"",warmStart:"",warmEnd:"",ceremony:"",competition:"",startPractice:"",endPractice:"",notes:"",hintEdits:"{}",meetVersion:"",races:[],custom:[]});}
+let model={days:[newDay()],done:{},kit:{}},saveError=false;
+function time(v){if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(v||""))return null;const [h,m]=v.split(":").map(Number);return h*60+m;}
+function fmt(v){return Number.isFinite(v)&&v>=0&&v<1440?String(Math.floor(v/60)).padStart(2,"0")+":"+String(v%60).padStart(2,"0"):"時刻未定";}
+function validDate(v){if(!/^\d{4}-\d{2}-\d{2}$/.test(v||""))return false;const d=new Date(v+"T00:00:00Z");return !isNaN(d)&&d.toISOString().slice(0,10)===v;}
+function nowJP(){const p=Object.fromEntries(new Intl.DateTimeFormat("sv-SE",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).map(x=>[x.type,x.value]));return {date:p.year+"-"+p.month+"-"+p.day,time:+p.hour*60+(+p.minute)};}
+function programName(p){return "No."+p.no+" "+p.gender+" "+p.distance+" "+p.stroke.normalize("NFKC")+" "+p.grade;}
+function storageLoad(){
+ try{const raw=localStorage.getItem(KEY);if(!raw)return;const m=JSON.parse(raw);
+ if(!m||!Array.isArray(m.days)||!m.days.length||m.days.length>30)throw Error("invalid");
+ const clean=(base,data)=>{if(!data||typeof data!=="object")return base;for(const k of Object.keys(base)){if(typeof base[k]==="string"&&typeof data[k]==="string")base[k]=data[k];}return base;};
+ model={days:m.days.map(d=>{const day=clean(newDay(),d);day.races=(Array.isArray(d?.races)?d.races:[]).map(r=>({...clean(raceNew(),r),program:Number.isInteger(r?.program)?r.program:null}));day.custom=(Array.isArray(d?.custom)?d.custom:[]).map(c=>clean({id:uid(),time:"",text:""},c));return day;}),done:m.done&&typeof m.done==="object"?m.done:{},kit:m.kit&&typeof m.kit==="object"?m.kit:{}};
+ model.days.forEach((day,i)=>{const old=m.days[i];for(const k of Object.keys(MEET_DEFAULTS))if(typeof old?.[k]!=="string")day[k]="";if(old?.meetVersion!=="secondary1")fillMeet(day);});
+ }catch(e){saveError=true;$("saveStatus").textContent="保存データを読み込めませんでした。現在の入力はコピー・印刷で残してください。";}
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(model));saveError=false;$("saveStatus").textContent="このブラウザに保存しました。予定は自動更新されます。";}catch(e){saveError=true;$("saveStatus").textContent="保存できません。閉じる前に予定をコピー・印刷してください。";}renderPlan();}
+function field(label,key,value,type="time"){return '<label>'+label+'<input data-field="'+key+'" type="'+type+'" value="'+esc(value)+'"></label>';}
+function renderSettings(){
+ $("days").innerHTML=model.days.map((d,i)=>'<div class="card day" data-day="'+d.id+'"><div class="rowhead"><h3>'+ (i+1)+'日目</h3><button class="danger" data-action="removeDay" '+(model.days.length===1?'disabled':'')+'>この日を削除</button></div><div class="grid">'+
+ field("日付","date",d.date,"date")+field("日程の呼び名","label",d.label,"text")+field("起床予定","wake",d.wake)+field("会場到着予定","arrival",d.arrival)+field("朝食（自分で決めた時刻）","breakfast",d.breakfast)+
+ '</div><details><summary>大会共通の時間（9/13は入力済み）</summary><div class="grid">'+
+ field("受付開始（選手・監督・引率者）","reception",d.reception)+field("開会式","ceremony",d.ceremony)+field("競技開始","competition",d.competition)+
+ field("開門","opening",d.opening)+field("全体アップ開始","warmStart",d.warmStart)+field("全体アップ終了","warmEnd",d.warmEnd)+field("公式スタート練習 開始","startPractice",d.startPractice)+field("公式スタート練習 終了","endPractice",d.endPractice)+
+ '</div><p class="muted">9/13の時刻は二次要項から入力済み。変更があれば編集できます。保護者・観覧者の入館は選手入館後。入口は飛込プール横階段です。わが子のアップ指示は「追加の予定」へ。</p><a href="https://www.kagoshima-swim.com/new/wp-content/uploads/2026/07/20260913_003.pdf" target="_blank" rel="noopener">二次要項を見る</a></details>'+
+ '<details><summary>9/13 小学生学年別のプログラムから追加</summary><p class="muted">新版No.1〜40。時刻は種目全体の開始予定です。日付が2026年9月13日のときに追加できます。</p><label>出場種目<select data-picker><option value="">種目を選択</option>'+PROGRAM.map(p=>'<option value="'+p.no+'">'+esc(programName(p))+'／'+p.time+'・'+p.heats+'組</option>').join("")+'</select></label><div class="actions"><button data-action="program">選んだ種目を追加</button><a href="https://www.kagoshima-swim.com/new/wp-content/uploads/2026/07/20260913_004_rev1.pdf" target="_blank" rel="noopener">公式プログラム（rev1）</a></div></details>'+
+ '<div class="races">'+d.races.map(r=>'<div class="card race" data-race="'+r.id+'"><div class="grid">'+
+ field("呼び名（任意）","child",r.child,"text")+field("種目名","name",r.name,"text")+field("開始予定","time",r.time)+
+ '<label>時刻の種類<select data-field="kind"><option value="program" '+(r.kind==="program"?"selected":"")+'>種目の開始予定</option><option value="heat" '+(r.kind==="heat"?"selected":"")+'>自分の組の開始予定</option></select></label>'+
+ field("コーチ・主催者の集合時刻","gather",r.gather)+field("組・レーン（任意）","slot",r.slot,"text")+
+ '</div><button class="danger" data-action="removeRace">このレースを削除</button></div>').join("")+'</div><button data-action="race">＋ レースを手入力</button>'+
+ '<h3 style="margin-top:20px">食事・準備などの追加予定</h3><p class="muted">種目を選ぶと食事・補食・準備の目安が自動で出ます。追加したい予定だけこちらへ。兄弟は呼び名を分けると別々に提案します。</p><button data-action="restoreHints">自動提案の変更・非表示をリセット</button>'+
+ d.custom.map(c=>'<div class="card custom" data-custom="'+c.id+'"><div class="grid">'+field("時刻","time",c.time)+field("内容","text",c.text,"text")+'</div><button class="danger" data-action="removeCustom">この予定を削除</button></div>').join("")+
+ '<button data-action="custom">＋ 予定を追加</button><label style="margin-top:16px">コーチの指示・個別メモ<textarea data-field="notes" placeholder="例：アップはチーム集合後。ゴーグルを2つ持参。">'+esc(d.notes)+'</textarea></label></div>').join("");
+}
+function buildDay(d){
+ const events=[],warnings=[],known=d.races.filter(r=>time(r.time)!==null).sort((a,b)=>time(a.time)-time(b.time));
+ const warn=s=>warnings.push(s),t=k=>time(d[k]);
+ function add(id,tm,title,source,detail="",personal=false){if(tm===null)return;events.push({id:d.id+":"+id,date:d.date,time:tm,title,source,detail,personal});}
+ if(!validDate(d.date))warn("日付を入力してください。「次の予定」は日付がある日のみ表示します。");
+ const wake=t("wake"),arrival=t("arrival"),breakfast=t("breakfast");
+ if(wake!==null&&arrival!==null&&arrival<wake)warn("到着予定が起床より前です。");
+ if(wake!==null&&breakfast!==null&&breakfast<wake)warn("朝食が起床より前です。");
+ add("wake",wake,"起床","自分の入力","",true);add("arrival",arrival,"会場到着","自分の入力","集合場所・荷物置き場・トイレを確認。",true);add("breakfast",breakfast,"朝食","自分の入力","登録した食事予定。食べ慣れた物を、体調に合わせて。",true);
+ [["reception","受付開始（選手・監督・引率者）"],["opening","開門・選手入館開始"],["warmStart","全体アップ開始"],["warmEnd","全体アップ終了"],["ceremony","開会式"],["competition","競技開始"]].forEach(([k,n])=>add(k,t(k),n,d.date==="2026-09-13"&&d[k]===MEET_DEFAULTS[k]?"公式二次要項":"自分の入力",d.date!=="2026-09-13"?"":k==="opening"?"保護者・観覧者は選手入館後。入口：飛込プール横階段。":k==="ceremony"?"選手・引率者はスタンドで参加。":k==="warmStart"?"サブプールは7:40〜競技終了まで。会場の指示を優先。":""));
+ if(d.date==="2026-09-13")warn("公式スタート練習は要確認：二次要項の時間表は8:25〜8:55、レーン表は8:10〜8:30です。当日の係員・コーチの指示を確認してください。招集は競技10分前まで。種目開始時刻と自分の組の時刻を混同しないでください。");
+ if(t("warmStart")!==null&&t("warmEnd")!==null&&t("warmEnd")<t("warmStart"))warn("全体アップ終了が開始より前です。");
+ if(t("opening")!==null&&t("warmStart")!==null&&t("warmStart")<t("opening"))warn("全体アップ開始が開門より前です。");
+ if(arrival!==null&&t("warmEnd")!==null&&arrival>t("warmEnd"))warn("到着が全体アップ終了より後です。コーチに確認してください。");
+ const a=t("startPractice"),b=t("endPractice");
+ if((a===null)!==(b===null))warn("公式スタート練習は開始と終了を両方入力してください。");
+ if(a!==null&&b!==null){if(b<a)warn("公式スタート練習の終了が開始より前です。");else add("practice",a,"公式スタート練習","大会案内の手入力",fmt(a)+"〜"+fmt(b)+"。監督者の指示に従ってください。");}
+ if(d.date==="2026-09-13"){
+ add("lunch",696,"午前競技終了・昼休み予定","公式プログラム rev1","午後は12:00開始。食事時刻は個別に調整。");
+ add("afternoon",720,"午後競技開始予定","公式プログラム rev1");
+ add("finish",826,"競技終了予定","公式プログラム rev1","閉会式13:55〜14:00予定。");
+ }
+ d.races.forEach(r=>{
+ const name=(r.child?r.child+" · ":"")+(r.name||"種目未入力")+(r.slot?" · "+r.slot:""),rt=time(r.time),gt=time(r.gather);
+ if(!r.name.trim())warn("種目名が未入力のレースがあります。");
+ if(rt===null)warn(name+"：開始時刻未定です。");
+ const p=PROGRAM.find(p=>p.no===r.program),unchanged=p&&r.kind==="program"&&r.time===p.time&&r.name===programName(p)&&d.date==="2026-09-13";
+ add(r.id+":race",rt,name,unchanged?"公式プログラム rev1":"自分の入力",r.kind==="heat"?"自分の組の開始予定。当日の案内を優先。":"種目開始予定。自分の組の出番・招集時刻とは異なります。",true);
+ add(r.id+":gather",gt,name+" 集合","集合指示の手入力","コーチ・主催者の案内を優先。",true);
+ if(gt!==null&&rt!==null&&gt>rt)warn(name+"：集合が開始予定より後です。自分の組との時刻の違いを確認してください。");
+ if(unchanged===false&&r.program&&d.date!=="2026-09-13")warn(name+"：9/13のプログラムから取り込んだ予定です。別の日に使う場合は時刻を確認してください。");
+ });
+ d.custom.forEach(c=>{const tm=time(c.time);if(!c.text.trim()||tm===null){warn("追加予定の内容・時刻が未入力です。");return;}add(c.id,tm,c.text,"自分の入力","",true);});
+ events.filter(e=>e.personal&&e.id!==d.id+":wake").forEach(e=>{if(wake!==null&&e.time<wake)warn(e.title+"：起床より前です。");if(arrival!==null&&(/:race$|:gather$/.test(e.id))&&e.time<arrival)warn(e.title+"：到着より前です。");});
+ for(let i=1;i<known.length;i++){const gap=time(known[i].time)-time(known[i-1].time);if(gap<40)warn(known[i-1].name+" → "+known[i].name+"：開始予定の間隔"+gap+"分。次の集合や兄弟の付き添いを確認してください。");}
+ if(breakfast!==null&&known.length){const gap=time(known[0].time)-breakfast;if(gap>=0&&gap<120)warn("朝食から最初の開始予定まで"+gap+"分。実際の運動開始（アップ）も考慮し、食事は個別に調整してください。");}
+ const personal=events.filter(e=>e.personal),groups=new Map();personal.forEach(e=>{const a=groups.get(e.time)||[];a.push(e.title);groups.set(e.time,a);});groups.forEach((a,k)=>{if(a.length>1)warn(fmt(k)+"に予定が重なっています："+a.join("／"));});
+ autoHints(d,known,events,warn);
+ events.sort((a,b)=>a.time-b.time);
+ return {day:d,events,warnings:[...new Set(warnings)]};
+}
+function key(e){return [e.id,e.date,e.time,e.title].join("|");}
+function autoHints(d,races,events,warn){
+ if(!races.length)return;
+ let edits={};try{edits=JSON.parse(d.hintEdits||"{}");}catch(e){}
+ const groups=new Map();races.forEach(r=>{const child=r.child.trim()||"お子さん";if(!groups.has(child))groups.set(child,[]);groups.get(child).push(r);});
+ const add=(id,tm,title,detail)=>{const edit=edits[id];if(edit?.hide)return;if(edit?.time)tm=time(edit.time);if(tm===null||tm<0||tm>=1440)return;const food=FOODS.find(f=>f[0]===edit?.food);if(food)detail+=" 選んだ補食："+food[1]+"。"+food[2];events.push({id:d.id+":hint:"+id,date:d.date,time:tm,title,source:"自動提案・調整できます",detail,personal:false,hint:id,day:d.id,food:food?.[0]||""});};
+ groups.forEach((rs,child)=>{
+ const prefix=child+":";const first=time(rs[0].time),last=time(rs.at(-1).time),wake=time(d.wake),arrival=time(d.arrival),warm=time(d.warmStart);
+ const prep=Math.max(arrival??0,Math.min(first-50,warm??first-50));
+ const breakfast=time(d.breakfast)??time(edits[prefix+"breakfast"]?.time)??Math.max(wake===null?0:wake+20,prep-120);
+ if(time(d.breakfast)===null)add(prefix+"breakfast",breakfast,child+"：朝食の目安","自宅で、食べ慣れたご飯やパンを中心に。最初の準備の約2時間前に仮置きしています。起床予定が分かれば反映。早すぎる・食べにくい場合は時刻を変更し、補食と分けて考えましょう。");
+ add(prefix+"prep",prep,child+"：着替え・アップ準備の目安","水着・ゴーグル・トイレを確認し、コーチのもとへ。朝の全体アップを使う想定の仮置きです。泳ぐ内容と実際の開始はチームの指示に合わせます。");
+ let lunch=690;for(const r of rs){const rt=time(r.time),gt=time(r.gather)??rt-20;if(lunch+120>gt&&lunch<rt+20)lunch=rt+20;}
+ lunch=Math.max(lunch,arrival??0);add(prefix+"lunch",lunch,child+"：昼食の目安","出番・集合を避け、次の集合まで約2時間の余裕を探した候補です。例：おにぎりとおかず、食べ慣れたうどんなど。指定の飲食可能な場所で。更衣室では食べないでください。遅い昼食になる場合は下の補食候補でつなぐことを検討。");
+ lunch=time(edits[prefix+"lunch"]?.time)??lunch;
+ let lastFood=breakfast;
+ rs.forEach((r,i)=>{const rt=time(r.time),previous=i?time(rs[i-1].time):null,gt=time(r.gather)??rt-20;const snack=rt-60;
+ if(snack>=lunch)lastFood=Math.max(lastFood,lunch);
+ if(snack>=lastFood+90&&Math.abs(snack-lunch)>=60&&(previous===null||snack>=previous+20)&&snack>=(wake??0)&&snack<gt){add(prefix+r.id+":snack",snack,child+"：補食の候補","出番の約1時間前の候補。空腹なら、食べ慣れたバナナや少量のパンなどを、指定の飲食可能な場所で。全ての候補で食べる必要はありません。直前に食事をした場合はこの候補を外せます。");lastFood=snack;}
+ if(i&&rt-previous>=90)add(prefix+r.id+":prep",Math.max(previous+20,gt-30,arrival??0),child+"：次の出番の準備","招集場所・ゴーグル・トイレを確認。追加アップが必要かコーチと相談する時間の目安です。");
+ if(i<rs.length-1){const gap=time(rs[i+1].time)-rt;if(gap>=40)add(prefix+r.id+":rest",rt+20,child+"：着替え・水分・休憩の目安","競技開始から20分後の仮置きです。実際に泳ぎ終わってから、体を冷やさず水分補給。次の出番が近いときは、食事やアップを重ねず次の集合を優先。");}
+ });
+ add(prefix+"finish",last+20,child+"：泳ぎ終わった後の目安","実際のレース終了後に着替え・水分補給。食事がまだなら昼食候補へ。忘れ物とチームの解散指示も確認。開始時刻から20分後という仮置きなので、組数に合わせて変更してください。");
+ if(wake!==null&&prep<wake)warn(child+"：準備の提案が起床より前です。起床・到着または提案時刻を調整してください。");
+ });
+}
+let results=[];
+function renderPlan(){
+ results=model.days.map(buildDay);
+ $("warnings").innerHTML=results.flatMap(r=>r.warnings.map(w=>'<div class="warning">'+esc(r.day.label||r.day.date)+"： "+esc(w)+'</div>')).join("");
+ $("events").innerHTML=results.map(r=>'<h3 class="daytitle">'+esc(r.day.date||"日付未定")+" · "+esc(r.day.label)+'</h3>'+
+ (r.day.notes?'<p>'+esc(r.day.notes)+'</p>':"")+
+ (r.events.length?r.events.map(e=>'<div class="event '+(model.done[key(e)]?"checked":"")+'"><time>'+fmt(e.time)+'</time><div><label><input type="checkbox" data-check="'+esc(key(e))+'" '+(model.done[key(e)]?"checked":"")+'><strong>'+esc(e.title)+'</strong></label><span class="badge">'+esc(e.source)+'</span><p class="muted">'+esc(e.detail)+'</p>'+hintControls(e)+'</div></div>').join(""):'<p class="empty">出場種目や予定を登録してください。名前の公開は必要ありません。</p>')).join("");
+ renderNext();
+}
+const FOODS=[
+ ["jelly","糖質補給用のゼリー飲料","例：inゼリー ジュニアエネルギーなど。対象年齢・カフェイン・アレルゲンを確認。1袋全部を必ず飲む意味ではありません。"],
+ ["fruitjelly","果汁ゼリー・パウチの果物ピューレ","食べ慣れたものを。低カロリー品はエネルギー補給用とは限りません。"],
+ ["banana","バナナなど食べ慣れた果物","食べやすい量に分けて用意。"],
+ ["bread","ロールパン・ジャムパン","脂質やクリームの多いものは直前を避け、食べ慣れたものを。"],
+ ["castella","カステラ・蒸しパン","少量に分けやすいものを。卵・乳・小麦などの表示を確認。"],
+ ["wagashi","小さなようかん・まんじゅう","食べ慣れたものを少量から。直前に無理に食べ切らない。"],
+ ["rice","小さなおにぎり","もう少し時間に余裕があるときの候補。保冷し、長時間常温に置かない。"],
+ ["crackers","プレーンクラッカー","口が乾く場合は飲み物も。走りながら食べない。"],
+ ["sports","スポーツドリンク（粉末を溶かすタイプも）","発汗や運動量に合わせて。粉末は表示どおりの濃さで。アミノ酸の粉末とは別物です。"],
+ ["juice","100%果汁飲料","糖質を含む飲み物の候補。水の代わりにずっと飲むのではなく、胃の調子に合わせて。"]
+];
+function hintControls(e){return e.hint?'<div class="actions"><label>目安時刻を変更<input type="time" data-hint="'+esc(e.hint)+'" data-hint-day="'+esc(e.day)+'" value="'+fmt(e.time)+'"></label><button data-hide-hint="'+esc(e.hint)+'" data-hint-day="'+esc(e.day)+'">この候補を外す</button></div>'+(e.hint.endsWith(":snack")?'<label>食べる・飲むものを選ぶ<select data-food="'+esc(e.hint)+'" data-hint-day="'+esc(e.day)+'"><option value="">候補から選ぶ（任意）</option>'+FOODS.map(f=>'<option value="'+f[0]+'" '+(e.food===f[0]?'selected':'')+'>'+esc(f[1])+'</option>').join('')+'</select></label><details><summary>ゼリー・粉末アミノ酸の違い</summary><p>ゼリーは糖質補給用を候補に。カフェイン入り・エナジードリンク系は子ども向けに選びません。粉末アミノ酸（BCAA・EAAなど）は、おにぎりや糖質ゼリーの代わりにはなりません。小学生の標準的な補食として自動提案せず、使用中の場合は対象年齢と必要性を医師・管理栄養士に確認してください。</p><p>食べ慣れたものを選び、アレルギーと保存方法を確認。大会当日に初めて試す必要はありません。</p></details>':''):"";}
+function editHint(day,id,value){const d=model.days.find(x=>x.id===day);if(!d)return;let edits={};try{edits=JSON.parse(d.hintEdits||"{}");}catch(e){}edits[id]={...edits[id],...value};d.hintEdits=JSON.stringify(edits);save();}
+document.addEventListener("change",e=>{if(e.target.dataset.food)editHint(e.target.dataset.hintDay,e.target.dataset.food,{food:e.target.value});});
+document.addEventListener("change",e=>{if(e.target.dataset.hint&&time(e.target.value)!==null)editHint(e.target.dataset.hintDay,e.target.dataset.hint,{time:e.target.value});});
+document.addEventListener("click",e=>{if(e.target.dataset.hideHint)editHint(e.target.dataset.hintDay,e.target.dataset.hideHint,{hide:true});});
+function renderNext(){
+ const now=nowJP(),items=results.filter(r=>validDate(r.day.date)&&r.day.date>=now.date).flatMap(r=>r.events).filter(e=>!model.done[key(e)]).sort((a,b)=>a.date.localeCompare(b.date)||a.time-b.time),e=items[0];
+ $("next").innerHTML=e?'<span class="badge">'+(e.date===now.date&&e.time<now.time?"予定時刻を過ぎた未完了の予定":"次の未完了の予定")+' · 日本時間</span><p><strong>'+esc(e.date)+" "+fmt(e.time)+" "+esc(e.title)+'</strong></p><p>'+esc(e.detail)+'</p><div class="actions"><button class="primary" data-finish="'+esc(key(e))+'">済みました</button><a href="#timeline">全体を見る</a></div>':'<h2>出場種目から、1日を作りましょう。</h2><p>これからの未完了の予定はありません。日付・出場種目を設定してください。</p><a href="#settings">予定を設定する</a>';
+}
+function toast(t){$("toast").textContent=t;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$("toast").textContent="",4000);}
+function raceNew(p){return {id:uid(),child:"",name:p?programName(p):"",time:p?p.time:"",kind:"program",gather:"",slot:"",program:p?.no||null};}
+$("days").addEventListener("input",e=>{
+ const el=e.target;if(!el.dataset.field)return;
+ const day=model.days.find(d=>d.id===el.closest(".day").dataset.day),r=el.closest("[data-race]"),c=el.closest("[data-custom]");
+ const obj=r?day.races.find(x=>x.id===r.dataset.race):c?day.custom.find(x=>x.id===c.dataset.custom):day;
+ if(obj===day&&el.dataset.field==="date"&&day.date!==el.value){for(const [k,v] of Object.entries(MEET_DEFAULTS))if(day[k]===v)day[k]="";day.date=el.value;fillMeet(day);for(const [k] of Object.entries(MEET_DEFAULTS)){const input=el.closest(".day").querySelector('[data-field="'+k+'"]');if(input)input.value=day[k];}}
+ obj[el.dataset.field]=el.value;save();
+});
+$("days").addEventListener("click",e=>{
+ const action=e.target.dataset.action;if(!action)return;const box=e.target.closest(".day"),d=model.days.find(x=>x.id===box.dataset.day);
+ if(action==="restoreHints"){if(!confirm("この日の自動提案の変更・非表示を元に戻しますか？"))return;d.hintEdits="{}";}
+ if(action==="race")d.races.push(raceNew());
+ if(action==="custom")d.custom.push({id:uid(),time:"",text:""});
+ if(action==="removeDay"){if(model.days.length<2||!confirm("この日の予定を削除しますか？"))return;model.days=model.days.filter(x=>x!==d);}
+ if(action==="removeRace"){if(!confirm("このレースを削除しますか？"))return;d.races=d.races.filter(x=>x.id!==e.target.closest("[data-race]").dataset.race);}
+ if(action==="removeCustom"){if(!confirm("この予定を削除しますか？"))return;d.custom=d.custom.filter(x=>x.id!==e.target.closest("[data-custom]").dataset.custom);}
+ if(action==="program"){
+ const p=PROGRAM.find(x=>String(x.no)===box.querySelector("[data-picker]").value);
+ if(!p){toast("種目を選んでください");return;}if(d.date!=="2026-09-13"){toast("このプログラムは2026年9月13日用です");return;}
+ if(d.races.some(r=>r.program===p.no)&&!confirm("同じ競技があります。別のお子さんの分として追加しますか？"))return;
+ d.races.push(raceNew(p));toast("出場種目を追加しました");
+ }
+ renderSettings();save();
+});
+$("addDay").onclick=()=>{model.days.push(newDay());renderSettings();save();};
+$("reset").onclick=()=>{if(!confirm("このブラウザに保存した予定とチェックをすべて消しますか？"))return;model={days:[newDay()],done:{},kit:{}};renderSettings();renderKit();save();};
+document.addEventListener("change",e=>{if(e.target.dataset.check){model.done[e.target.dataset.check]=e.target.checked;save();}if(e.target.dataset.kit){model.kit[e.target.dataset.kit]=e.target.checked;save();}});
+document.addEventListener("click",e=>{if(e.target.dataset.finish){model.done[e.target.dataset.finish]=true;save();}});
+function textPlan(){return results.map(r=>[r.day.date+" "+r.day.label,r.day.notes,...r.warnings.map(w=>"確認："+w),...r.events.map(e=>(model.done[key(e)]?"✓ ":"")+fmt(e.time)+" "+e.title+" ["+e.source+"] "+e.detail)].filter(Boolean).join("\n")).join("\n\n")+"\n※当日の案内を優先。食事・アップは個別の指示に合わせてください。";}
+$("copy").onclick=async()=>{renderPlan();const t=textPlan();try{await navigator.clipboard.writeText(t);toast("予定をコピーしました");}catch(err){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();a.setSelectionRange(0,a.value.length);let ok=false;try{ok=document.execCommand("copy");}catch(e){}a.remove();toast(ok?"予定をコピーしました":"コピーできません。印刷 / PDFをご利用ください。");}};
+$("print").onclick=()=>{renderPlan();window.print();};
+function renderKit(){$("kitItems").innerHTML=["水着・キャップ","ゴーグル・予備","タオル・着替え","飲み物","食べ慣れた食事・補食","集合場所・連絡先の確認"].map((n,i)=>'<label class="kit"><input type="checkbox" data-kit="k'+i+'" '+(model.kit["k"+i]?"checked":"")+'>'+n+'</label>').join("");}
+storageLoad();renderSettings();renderKit();renderPlan();
+if(!saveError)$("saveStatus").textContent="入力はこのブラウザに保存されます。外部には送信しません。";
+setInterval(renderNext,30000);
+</script></body></html>
