@@ -2,6 +2,12 @@ name: Sync Kagoshima swim federation calendar
 
 on:
   workflow_dispatch:
+    inputs:
+      force_page_build:
+        description: Rebuild GitHub Pages even if the calendar data did not change
+        type: boolean
+        required: false
+        default: false
   schedule:
     - cron: "17 */6 * * *"
 
@@ -41,8 +47,8 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Request a GitHub Pages build for changed calendar data
-        if: steps.commit-calendar.outputs.changed == 'true'
+      - name: Request a GitHub Pages build when needed
+        if: steps.commit-calendar.outputs.changed == 'true' || inputs.force_page_build
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
