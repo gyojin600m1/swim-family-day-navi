@@ -1,0 +1,38 @@
+name: Sync Kagoshima swim federation calendar
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-calendar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download and normalize the public calendar
+        run: node scripts/sync-calendar.mjs
+
+      - name: Commit changed calendar data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add meets.json
+          if git diff --cached --quiet; then
+            echo "Calendar data is unchanged."
+          else
+            git commit -m "Sync Kagoshima swim federation calendar"
+            git push
+          fi
