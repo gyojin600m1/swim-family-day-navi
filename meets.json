@@ -1,0 +1,62 @@
+{
+  "source": "https://www.kagoshima-swim.com/",
+  "updatedAt": "2026-09-12T09:21:07.521Z",
+  "events": [
+    {
+      "id": "f236ab0dd0322b766ae5",
+      "title": "第33回小学生学年別選手権水泳競技大会",
+      "startDate": "2026-09-13",
+      "endDateExclusive": "2026-09-14",
+      "location": "鹿児島市／鴨池公園水泳プール"
+    },
+    {
+      "id": "74abb226c33bf59ca6ff",
+      "title": "第78回県民スポーツ大会（水泳競技）",
+      "startDate": "2026-10-11",
+      "endDateExclusive": "2026-10-12",
+      "location": "大和村/大和村村民プール"
+    },
+    {
+      "id": "3d8a48195c4905f13aab",
+      "title": "第46回鹿児島県短水路水泳記録会",
+      "startDate": "2026-11-01",
+      "endDateExclusive": "2026-11-02",
+      "location": "鹿児島市/鴨池公園水泳プール"
+    },
+    {
+      "id": "201ec08c3e92cc2c0d37",
+      "title": "全国JR水泳競技大会",
+      "startDate": "2026-11-14",
+      "endDateExclusive": "2026-11-15",
+      "location": "鹿児島市／鴨池公園水泳プール"
+    },
+    {
+      "id": "5ea6216c5f9917aa65eb",
+      "title": "第259回鹿児島県スイミングクラブ（エリート）水泳競技大会",
+      "startDate": "2026-12-13",
+      "endDateExclusive": "2026-12-14",
+      "location": "鹿児島市／鴨池公園水泳プール"
+    },
+    {
+      "id": "5d5dcd052752972c70f2",
+      "title": "第53回JACA新年フェスティバル水泳競技大会（鹿児島会場）",
+      "startDate": "2027-01-10",
+      "endDateExclusive": "2027-01-11",
+      "location": "鹿児島市／鴨池公園水泳プール"
+    },
+    {
+      "id": "73ef73d5793f6312cbec",
+      "title": "鹿児島スイムフェスティバル",
+      "startDate": "2027-01-24",
+      "endDateExclusive": "2027-01-25",
+      "location": "鹿児島市／鴨池公園水泳プール"
+    },
+    {
+      "id": "8e06a33649e2752e6f70",
+      "title": "第260回鹿児島県スイミングクラブ（エリート）水泳競技大会",
+      "startDate": "2027-02-21",
+      "endDateExclusive": "2027-02-22",
+      "location": "鹿児島市／鴨池公園水泳プール"
+    }
+  ]
+}
