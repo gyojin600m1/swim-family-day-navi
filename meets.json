@@ -1,14 +1,7 @@
 {
   "source": "https://www.kagoshima-swim.com/",
-  "updatedAt": "2026-09-12T09:21:07.521Z",
+  "updatedAt": "2026-09-13T16:25:33.368Z",
   "events": [
-    {
-      "id": "f236ab0dd0322b766ae5",
-      "title": "第33回小学生学年別選手権水泳競技大会",
-      "startDate": "2026-09-13",
-      "endDateExclusive": "2026-09-14",
-      "location": "鹿児島市／鴨池公園水泳プール"
-    },
     {
       "id": "74abb226c33bf59ca6ff",
       "title": "第78回県民スポーツ大会（水泳競技）",
